@@ -10,8 +10,9 @@ body{
   left:200;
   bottom:200; */
   margin: auto;
-  width: 60%;
-  height: 50%;
-  border: 5px solid #FFFF00;
+  margin-top: 30%;
+  width: 600;
+  height: 400;
+  /* border: 5px solid #FFFF00; */
   padding: 10px;
 }
