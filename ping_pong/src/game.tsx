@@ -85,13 +85,14 @@ function update(ctx: any, __ball:ball,player_left:user, player_right:user)
     player_right.score++;
     __ball.reset();
   }
-  else if (__ball.right > ctx.canvas.width){
+  else if (__ball.right() > ctx.canvas.width){
     player_left.score++;
     __ball.reset();
   }
   __ball.x += __ball.velocityX;
   __ball.y += __ball.velocityY;
-  player_left.y = player_right.y += ((__ball.y - (player_right.height / 2))) * 0.1;
+  player_right.y += ((__ball.y - (player_right.y +  player_right.height / 2))) * 0.1;
+  player_left.y = player_right.y + 1;
   if (__ball.top() < 0 || __ball.bottom() > ctx.canvas.height){
     __ball.velocityY *= -1;
   }
@@ -130,10 +131,10 @@ const Game: React.FC<{}> = () => {
     let player_left= new user(ctx, 0);
     let player_right= new user(ctx, 1);
     let ball_ = new ball(ctx);
-    update(ctx, ball_, player_left, player_right);
     const interval = setInterval(() => {
+      update(ctx, ball_, player_left, player_right);
       render(ctx, player_left, player_right, ball_);
-      console.log(1);
+      // console.log(player_left.y);
     }, 20);
     return () => clearInterval(interval);
 	}
