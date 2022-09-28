@@ -1,10 +1,14 @@
 .App {
     text-align: center;
+    /* width: 70%;
+    height: 100%;
+    background-color: beige; */
 }
 
   
 .App-header {
-  background-color: #282c34;
+  /* background-color: #013398; */
+
   /* min-height: 100vh; */
   /* display: flex; */
   /* flex-direction: column; */
@@ -28,5 +32,5 @@
 } */
 
 .canvasRef{
-    background-color: black;
+  /* background-color: black; */
 }
