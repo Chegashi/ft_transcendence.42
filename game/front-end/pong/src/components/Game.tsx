@@ -61,6 +61,8 @@ class pong{
 		this._ball.y = this.canvas_taille[1] / 2;
 		this._ball.velocity_X = -this._ball.velocity_X;
 		this._ball.speed = 5;
+		this.player_left.y = this.canvas_taille[1] / 2 - 100 / 2;
+		this.player_right.y = this.player_left.y;
 	}
 	update = ():posistion => {
 		if (this.ball_left_pos() < 0)
