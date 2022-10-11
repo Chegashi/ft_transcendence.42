@@ -120,39 +120,45 @@ class pong{
 }
 
 function render(ctx:any, game_state:any){
-	//ctx.drawImage(img[0], 0, 0, game_state.taille[0], game_state.taille[1]);
-	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, game_state.taille[0], game_state.taille[1]);
-	
-	ctx.font = "30px Comic Sans MS";
-	ctx.fillStyle = "white";
-	ctx.fillText(game_state.player_l.score.toString(),
-		game_state.taille[0] / 4, game_state.taille[1] / 6);
-	ctx.fillText(game_state.player_r.score.toString(),
-		game_state.taille[0] * 3 / 4, game_state.taille[1] / 6);
-	ctx.fillStyle = "white";
-    for (let i = 0; i <= game_state.taille[0] ; i += 15)
-    	ctx.fillRect(game_state.net.x ,game_state.net.y + i,
-			game_state.net.width, game_state.net.height);
+	//let img = React.createElement("img", {src:"/assets/ball.png"});		F
+	//ctx.drawImage(img, 0, 0, game_state.taille[0], game_state.taille[1]);	F
+	//ctx.fillStyle = "black";
+	//ctx.fillRect(0, 0, game_state.taille[0], game_state.taille[1]);
+	var image = new Image();
+	image.src = "/assets/ball.png";
+	image.onload = () => { ctx.drawImage(image, 0, 0, game_state.taille[0], game_state.taille[1]) };
+
+
+	//ctx.font = "30px Comic Sans MS";
+	//ctx.fillStyle = "white";
+	//ctx.fillText(game_state.player_l.score.toString(),
+	//	game_state.taille[0] / 4, game_state.taille[1] / 6);
+	//ctx.fillText(game_state.player_r.score.toString(),
+	//	game_state.taille[0] * 3 / 4, game_state.taille[1] / 6);
+	//ctx.fillStyle = "white";
+    //for (let i = 0; i <= game_state.taille[0] ; i += 15)
+    //	ctx.fillRect(game_state.net.x ,game_state.net.y + i,
+	//		game_state.net.width, game_state.net.height);
 
 	//ctx.drawImage(img[2], game_state.player_l.x, game_state.player_l.y, game_state.player_l.width, game_state.player_l.height);
-	ctx.fillStyle = "red";
-	ctx.fillRect(game_state.player_l.x ,game_state.player_l.y,
-		game_state.player_l.width, game_state.player_l.height);
+	//ctx.fillStyle = "red";
+	//ctx.fillRect(game_state.player_l.x ,game_state.player_l.y,
+	//	game_state.player_l.width, game_state.player_l.height);
 
 	//ctx.drawImage(_player_right_img, game_state.player_r.x, game_state.player_r.y, game_state.player_r.width, game_state.player_r.height);
-	ctx.fillStyle = "green"; 
-	ctx.fillRect(game_state.player_r.x , game_state.player_r.y,
-		game_state.player_r.width, game_state.player_r.height);
+	//ctx.fillStyle = "green"; 
+	//ctx.fillRect(game_state.player_r.x , game_state.player_r.y,
+	//	game_state.player_r.width, game_state.player_r.height);
 
 	//ctx.drawImage(_ball_img, game_state.__ball__.x, game_state.__ball__.y, game_state.__ball__.radius, game_state.__ball__.radius);
-	ctx.fillStyle = "white";
-	ctx.beginPath();
-	ctx.arc(game_state.__ball__.x, game_state.__ball__.y,
-		game_state.__ball__.radius, 0, 2 * Math.PI);
-    ctx.closePath();
-	ctx.fill();
+	//ctx.fillStyle = "white";
+	//ctx.beginPath();
+	//ctx.arc(game_state.__ball__.x, game_state.__ball__.y,
+	//	game_state.__ball__.radius, 0, 2 * Math.PI);
+    //ctx.closePath();
+	//ctx.fill();
 }
+
 export default function Game(props:any){
 	let canvasRef = useRef<HTMLCanvasElement | null>(null);
 	let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
@@ -163,16 +169,16 @@ export default function Game(props:any){
 			let new_game = new pong(props.width, props.height);
 			let histoy_game: any[] = [];
 			histoy_game.push(new_game.to_render());
-			const interval = setInterval(() => {
-				histoy_game.push(new_game.update());
+			//const interval = setInterval(() => {
+				//histoy_game.push(new_game.update());
 				render(ctx, new_game.to_render());
-				if (new_game.player_left.score === 5 || new_game.player_right.score === 5){
-					new_game.reset();
+				//if (new_game.player_left.score === 5 || new_game.player_right.score === 5){
+				//	new_game.reset();
 					render(ctx, new_game.to_render());
-					clearInterval(interval);
-				}
-			}, 1000 / 60);
-			return () => clearInterval(interval);
+				//	clearInterval(interval);
+				//}
+			//}, 1000 / 60);
+			//return () => clearInterval(interval);
 		}
 	}, [props.width, props.height]);
 
