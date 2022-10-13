@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-//import _ball_img from './assets/ball.png';
-//import _baground_img from './assets/baground_table.jpg';
-//import _player_left_img from './assets/player_red.png';
-//import _player_right_img from './assets/player_red.png';
+import Sketch from 'react-p5';
+import p5Types from 'p5';
+import _ball_img from './assets/ball.png';
+import _baground_img from './assets/baground_table.jpg';
+import _player_left_img from './assets/player_red.png';
+import _player_right_img from './assets/player_green.png';
 
 interface player{
 	x:number;
@@ -33,16 +34,15 @@ class pong{
 	how_play:player;
 	_ball:ball;
 	canvas_taille:number[];
-	net:{x:number, y:number, width:number, height:number,
-		color:any};
 	constructor(width:number, height:number){
 		this.canvas_taille = [width, height];
-		this.player_left = {x:0, y:height / 2 - 100 / 2, width:10, height:100, score:0};
-		this.player_right = {x:width - 10, y:height / 2 - 100 / 2, width:10, height:100, score:0};
-		this._ball = {x:width / 2, y:height / 2, radius:10, speed:5,
-					velocity_X:5, velocity_Y:5};
+		this.player_left = {x:width / 100, y:height * 3 / 8, width:width / 60,
+			height:height / 4, score:0};
+		this.player_right = {x:width * 73 / 75, y:height * 3 / 8, width:10,
+			height:100, score:0};
+		this._ball = {x:width * 0.48, y:height * 0.5, radius:width * 0.02,
+			speed:width / 120 , velocity_X:width / 120, velocity_Y:width / 120};
 		this.how_play = this.player_right;
-		this.net = {x:width / 2 - 2 / 2, y:0, width:2, height:10, color:"white"};
 	}
 	ball_top_pos = ():number => { return (this._ball.y - this._ball.radius); }
 	ball_bottom_pos = ():number => { return (this._ball.y + this._ball.radius); }
@@ -57,12 +57,12 @@ class pong{
 				_ball:[this._ball.x, this._ball.y]};
 	}
 	reset = () => {
-		this._ball.x = this.canvas_taille[0] / 2;
-		this._ball.y = this.canvas_taille[1] / 2;
+		this._ball.x = this.canvas_taille[0] * 0.48;
+		this._ball.y = this.canvas_taille[1] * 0.5;
 		this._ball.velocity_X = -this._ball.velocity_X;
-		this._ball.speed = 5;
-		this.player_left.y = this.canvas_taille[1] / 2 - 100 / 2;
-		this.player_right.y = this.player_left.y;
+		this._ball.speed = this.canvas_taille[0] / 120;
+		this.player_left.y = this.canvas_taille[1] * 3 / 8;
+		this.player_right.y = this.canvas_taille[1] * 3 / 8;
 	}
 	update = ():posistion => {
 		if (this.ball_left_pos() < 0)
@@ -110,77 +110,49 @@ class pong{
 			&& this.ball_top_pos() < this.player_bottom_pos(this.how_play)
 			&& this.ball_left_pos() < this.player_right_pos(this.how_play));
 	}
-	to_render = ():any => {
-		const obj : {taille:number[], __ball__:ball, player_l:player,
-			player_r:player, net:any} = {
-			taille:this.canvas_taille, __ball__:this._ball, player_l:this.player_left,
-			player_r:this.player_right, net:this.net};
-		return (obj);
-	}
-}
-
-function render(ctx:any, game_state:any){
-	//let img = React.createElement("img", {src:"/assets/ball.png"});		F
-	//ctx.drawImage(img, 0, 0, game_state.taille[0], game_state.taille[1]);	F
-	//ctx.fillStyle = "black";
-	//ctx.fillRect(0, 0, game_state.taille[0], game_state.taille[1]);
-	var image = new Image();
-	image.src = "/assets/ball.png";
-	image.onload = () => { ctx.drawImage(image, 0, 0, game_state.taille[0], game_state.taille[1]) };
-
-
-	//ctx.font = "30px Comic Sans MS";
-	//ctx.fillStyle = "white";
-	//ctx.fillText(game_state.player_l.score.toString(),
-	//	game_state.taille[0] / 4, game_state.taille[1] / 6);
-	//ctx.fillText(game_state.player_r.score.toString(),
-	//	game_state.taille[0] * 3 / 4, game_state.taille[1] / 6);
-	//ctx.fillStyle = "white";
-    //for (let i = 0; i <= game_state.taille[0] ; i += 15)
-    //	ctx.fillRect(game_state.net.x ,game_state.net.y + i,
-	//		game_state.net.width, game_state.net.height);
-
-	//ctx.drawImage(img[2], game_state.player_l.x, game_state.player_l.y, game_state.player_l.width, game_state.player_l.height);
-	//ctx.fillStyle = "red";
-	//ctx.fillRect(game_state.player_l.x ,game_state.player_l.y,
-	//	game_state.player_l.width, game_state.player_l.height);
-
-	//ctx.drawImage(_player_right_img, game_state.player_r.x, game_state.player_r.y, game_state.player_r.width, game_state.player_r.height);
-	//ctx.fillStyle = "green"; 
-	//ctx.fillRect(game_state.player_r.x , game_state.player_r.y,
-	//	game_state.player_r.width, game_state.player_r.height);
-
-	//ctx.drawImage(_ball_img, game_state.__ball__.x, game_state.__ball__.y, game_state.__ball__.radius, game_state.__ball__.radius);
-	//ctx.fillStyle = "white";
-	//ctx.beginPath();
-	//ctx.arc(game_state.__ball__.x, game_state.__ball__.y,
-	//	game_state.__ball__.radius, 0, 2 * Math.PI);
-    //ctx.closePath();
-	//ctx.fill();
 }
 
 export default function Game(props:any){
-	let canvasRef = useRef<HTMLCanvasElement | null>(null);
-	let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
-	useEffect(() => {
-		if (canvasRef.current) {
-			canvasCtxRef.current = canvasRef.current.getContext('2d');
-			let ctx = canvasCtxRef.current;
-			let new_game = new pong(props.width, props.height);
-			let histoy_game: any[] = [];
-			histoy_game.push(new_game.to_render());
-			//const interval = setInterval(() => {
-				//histoy_game.push(new_game.update());
-				render(ctx, new_game.to_render());
-				//if (new_game.player_left.score === 5 || new_game.player_right.score === 5){
-				//	new_game.reset();
-					render(ctx, new_game.to_render());
-				//	clearInterval(interval);
-				//}
-			//}, 1000 / 60);
-			//return () => clearInterval(interval);
-		}
-	}, [props.width, props.height]);
+		let new_game = new pong(props.width, props.height);
+		let histoy_game: any[] = [];
+		let bagrounad_img:any;
+		let ball_img:any;
+		let player_left_img:any;
+		let player_right_img:any;
 
-	return (<canvas ref={canvasRef} width={props.width} height={props.height} ></canvas>);
+		const setup = (p5: p5Types, canvasParentRef: Element) => {
+			p5.createCanvas(props.width, props.height).parent(
+			  canvasParentRef,
+			);
+			bagrounad_img = p5.loadImage(_baground_img);
+			ball_img = p5.loadImage(_ball_img);
+			player_left_img = p5.loadImage(_player_left_img);
+			player_right_img = p5.loadImage(_player_right_img);
+		};
+
+		const draw = (p5: p5Types) => {
+			p5.image(bagrounad_img, 0, 0, props.width, props.height);
+			p5.image(player_left_img, new_game.player_left.x, new_game.player_left.y
+				, new_game.player_left.width, new_game.player_left.height);
+			p5.image(player_right_img, new_game.player_right.x, new_game.player_right.y
+					, new_game.player_right.width, new_game.player_right.height);
+			p5.fill(51, 102, 255);
+			for (let i = 0; i <= props.height ; i += props.height * 0.08)
+				p5.rect(props.width * 0.49 , i, props.width * 0.01, props.height * 0.04);
+			p5.image(ball_img, new_game._ball.x - new_game._ball.radius ,
+				new_game._ball.y - new_game._ball.radius,
+				new_game._ball.radius * 2, new_game._ball.radius * 2);
+			p5.textSize(32);
+			p5.fill(230, 236, 255);
+			p5.text(new_game.player_left.score.toString(), props.width / 4, props.height / 6);
+			p5.text(new_game.player_right.score.toString(), props.width * 3 / 4, props.height / 6);
+			if (new_game.player_left.score < 5 && new_game.player_right.score < 5)
+					new_game.update();
+		}
+		histoy_game.push(new_game.update());
+	return (
+		<div className='game'>
+			<Sketch setup={setup} draw={draw} />
+		</div>
+	);
 }
