@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+
   padding: 25%;
 }
 
@@ -15,4 +16,9 @@
   color: white;
 }
 
+.game{
+  width: 600px;
+  height: 400px;
+  background-color: black;
+}
 
