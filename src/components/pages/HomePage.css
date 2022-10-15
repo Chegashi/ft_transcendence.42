@@ -1,0 +1,48 @@
+.HomePage {
+    margin-top: 100px;
+}
+
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid grey;
+    
+  }
+  .table{
+    margin: 0 auto;
+  }
+  td:hover {background-color: coral;}
+
+  td {
+    margin-top: 100px;
+    background-color: #800080;
+    color: white;
+    justify-content: center;
+  }
+  
+
+.th{
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+}
+
+.Friendbutton {
+  border-bottom: 1px solid grey;
+  height: 5vh;
+  position:fixed;bottom: 5.3em;;right:0
+}
+
+.container {
+  margin-top: auto;
+  justify-content: space-between;
+  flex-direction: column;
+  display: flex;
+  bottom: 0;
+
+}
+.container .btn-holder {
+  justify-content: flex-end;
+  display: flex;
+}

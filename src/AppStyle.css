@@ -1,0 +1,10 @@
+.App {
+    background-image: linear-gradient(to right, pink , purple);
+    min-height: 100vh;
+   margin-top: 62px;
+    padding: -100px;
+   
+}   
+html, body {
+    overflow: hidden;
+  }

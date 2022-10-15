@@ -1,0 +1,36 @@
+.navbar-container{
+}
+
+
+.navbar {
+    background: linear-gradient(to top, #c471f5 0%, #fa71cd 100%);
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: fixed;
+  }
+
+ul {
+    list-style-type: none;
+    overflow: hidden;
+
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px px;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
