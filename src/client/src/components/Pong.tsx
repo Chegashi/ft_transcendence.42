@@ -15,13 +15,6 @@ interface ball{
 	velocity_Y:number;
 }
 
-interface rendring_type{
-	playe_left:object;
-	playe_right:object;
-	ball:object;
-	music:number
-}
-
 let width = 600;
 let height = 400;
 
@@ -103,7 +96,8 @@ export default class pong{
 			player_left: {y:this.player_left.y / height, score:this.player_left.score},
 			player_right: {y:this.player_right.y / height, score:this.player_right.score},
 			ball: {x:(this._ball.x / width), y:(this._ball.y / height)},
-			music_id:this.music_id
+			music_id:this.music_id, still_playing:(this.player_left.score < 5 &&
+			this.player_right.score < 5)
 		};
 	}
 }
