@@ -4,7 +4,7 @@ import Game from './components/Game';
 function App() {
   return (
     <div className="App">
-        <Game width = "600" height="400" />
+        <Game width = "900" height="600" />
     </div>
   );
 }

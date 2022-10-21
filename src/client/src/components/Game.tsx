@@ -7,11 +7,13 @@ import _baground_img from './assets/baground_table.jpg';
 import _player_left_img from './assets/player_red.png';
 import _player_right_img from './assets/player_green.png';
 import _play_img from './assets/play.gif'
+//import hit from './assets/soundshit.mp3'
 
-let _hit = new Audio();
-let _wall = new Audio();
-let _left_scor = new Audio();
-let _right_scor = new Audio();
+
+const _hit = new Audio();
+const _wall = new Audio();
+const _left_scor = new Audio();
+const _right_scor = new Audio();
 
 function update_data(_data:any, width:number, height:number):object{
 	return {
@@ -37,7 +39,8 @@ export default function Game(props:any){
 	let start:boolean;
 
 	const setup = (p5: p5Types, canvasParentRef: Element) => {
-		p5.createCanvas(props.width, props.height).parent( canvasParentRef,);
+		let cnv = p5.createCanvas(props.width, props.height).parent( canvasParentRef,);
+		cnv.id('pong_canvas');
 		bagrounad_img = p5.loadImage(_baground_img);
 		ball_img = p5.loadImage(_ball_img);
 		player_left_img = p5.loadImage(_player_left_img);
@@ -89,17 +92,16 @@ export default function Game(props:any){
 			p5.fill(230, 236, 255);
 			p5.text(new_game.player_left.score.toString(), props.width / 4, props.height / 6);
 			p5.text(new_game.player_right.score.toString(), props.width * 3 / 4, props.height / 6);
-
-		//if (data.music_id === 1)
-		//	_hit.play();
-		//else if (data.music_id === 2)
-		//	_wall.play();
-		//else if (data.music_id === 3)
-		//	_left_scor.play();
-		//else if (data.music_id === 4)
-		//	_right_scor.play();
-		//console.log(p5.mouseX, p5.mouseY);
-	}}
+			//if (data.music_id === 1)
+			//	_hit.play();
+			//else if (data.music_id === 2)
+			//	_wall.play();
+			//else if (data.music_id === 3)
+			//	_left_scor.play();
+			//else if (data.music_id === 4)
+			//	_right_scor.play();
+		}
+	}
 	const mousePressed = (p5: p5Types) => {
 		locked = (overBox) ? true : false;
 		yOffset = p5.mouseY - data.player_left.y;
@@ -118,7 +120,7 @@ export default function Game(props:any){
 	}
 	return (
 		<div className='game'>
-			<Sketch setup={setup} draw={draw} mousePressed={mousePressed}
+			<Sketch className={"ttt"} setup={setup} draw={draw} mousePressed={mousePressed}
 				mouseDragged={mouseDragged} mouseReleased={mouseReleased} />
 		</div>
 	);
