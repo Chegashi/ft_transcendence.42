@@ -12,19 +12,20 @@
 
 include .env
 
-SRC = docker-compose.yaml
 
-all :
-	docker-compose -f  ${SRC} up -d
+all : stop
+	docker-compose up -d
 
 up :
-	docker-compose -f  ${SRC} up -d
+	docker-compose up --build -d --remove-orphans
+stop :
+	docker-compose stop
 start:
-	docker-compose -f ${SRC} start
+	docker-compose start
 down:
-	docker-compose -f ${SRC} down
+	docker-compose down
 ps:
-	docker-compose -f ${SRC} ps
+	docker-compose ps
 
 clean :
 	docker stop $$(docker ps -qa);\
