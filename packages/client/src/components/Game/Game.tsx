@@ -1,11 +1,6 @@
-// import { networkInterfaces } from 'os';
-import React, { useRef, useEffect } from 'react';
+import Sketch from 'react-p5';
+import p5Types from 'p5';
 import pong from './Pong'
-
-interface Props {
-	width: string;
-	height: string;
-}
 
 function update_data(_data:any, width:number, height:number):object{
 	return {
@@ -16,49 +11,89 @@ function update_data(_data:any, width:number, height:number):object{
 	};
 }
 
-const Game: React.FC<Props> = (props:any) => {
-  let canvasRef = useRef<HTMLCanvasElement | null>(null);
-  let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
+export default function Game(props:any){
 	let new_game = new pong();
-	let data:Object;
-	data = new_game.data_to_render();
-	data = update_data(data, props.width, props.height);
+	let overBox:boolean = false;
+	let locked:boolean = false;
+	let yOffset:number = 0.0;
+	let data:any;
+	let start:boolean;
 
-  useEffect(() => {
-    if (canvasRef.current) {
-    canvasCtxRef.current = canvasRef.current.getContext('2d');
-    let ctx = canvasCtxRef.current;
-    const interval = setInterval(() => {
-      new_game.update();
-			data = update_data(new_game.data_to_render(), props.width, props.height);
-      render(ctx, data, props.width, props.height);
-    }, 20);
-    return () => clearInterval(interval);
+	const setup = (p5: p5Types, canvasParentRef: Element) => {
+		let cnv = p5.createCanvas(props.width, props.height).parent( canvasParentRef);
+		cnv.id('pong_canvas');
+		data = new_game.data_to_render();
+		data = update_data(data, props.width, props.height);
+	};
+
+	const draw = (p5: p5Types) => {
+		if (p5.mouseX > 0 - props.width / 60
+				&& p5.mouseX < 0 + props.width / 60
+				&& p5.mouseY > data.player_left.y - props.height / 4
+				&& p5.mouseY < data.player_left.y + props.height / 4)
+			overBox = true;
+		else
+			overBox = false;
+		if (!start)
+		{
+			p5.fill("black");
+			p5.rect(0, 0, props.width, props.height);
+			p5.fill("white");
+			p5.textSize(32);
+			p5.text("Click to start", props.width / 2 - 100, props.height / 2);
+			// p5.image(playe_img, 0, 0, props.width, props.height);
+		}
+		else{
+			if (data.still_playing){
+				new_game.update();
+				data = new_game.data_to_render();
+				data = update_data(data, props.width, props.height);
+			}
+			else
+			{
+				p5.fill("white");
+				p5.textSize(64);
+				p5.text("Game Over", props.width / 3, props.height / 2);
+				p5.noLoop();
+			}
+			p5.fill("black");
+			p5.rect(0, 0, props.width, props.height);
+			p5.fill("white");
+			p5.rect(0, data.player_left.y, props.width / 60, props.height / 4);
+			p5.rect(props.width - props.width / 60, data.player_right.y, props.width / 60, props.height / 4);
+			p5.fill(51, 102, 255);
+			for (let i = 0; i <= props.height ; i += props.height / 27)
+				p5.rect(props.width * 0.48 , i, props.width * 0.02, props.height * 0.025);
+			p5.fill("white");
+			p5.ellipse(data.ball.x - props.width / 60,
+			data.ball.y - props.height / 40, props.width / 30, props.height / 20);
+			p5.textSize(32);
+			p5.textFont("75px fantasy");
+			p5.fill(230, 236, 255);
+			p5.text(new_game.player_left.score.toString(), props.width / 4, props.height / 6);
+			p5.text(new_game.player_right.score.toString(), props.width * 3 / 4, props.height / 6);
+		}
 	}
-  }, []);
-  return (<canvas ref={canvasRef} width={props.width} height={props.height} ></canvas>);
-};
+	const mousePressed = (p5: p5Types) => {
+		locked = (overBox) ? true : false;
+		yOffset = p5.mouseY - data.player_left.y;
 
-function drawRect(ctx: any, x: number, y: number, w: number, h: number, color: any){
-  ctx!.fillStyle = color;
-  ctx!.fillRect(x, y, w, h);
+	}
+	const mouseDragged = (p5: p5Types) => {
+		if (locked && p5.mouseY > 0 && p5.mouseY < props.height)
+			new_game.set_player((p5.mouseY - yOffset) / props.height);
+	}
+	const mouseReleased = (p5: p5Types) => {
+		locked = false;
+		if (!start){
+			p5.loop();
+			start = true;
+		}
+	}
+	return (
+		<div className='game'>
+			<Sketch className={"ttt"} setup={setup} draw={draw} mousePressed={mousePressed}
+				mouseDragged={mouseDragged} mouseReleased={mouseReleased} />
+		</div>
+	);
 }
-
-function drawText(ctx: any, text: any, x: number, y: number, color: any){
-    ctx!.fillStyle = color;
-    ctx!.font = "75px fantasy";
-    ctx!.fillText(text, x, y);
-}
-
-function render(ctx: any, data: any, width: number, height: number){
-	drawRect(ctx, 0, 0, ctx!.canvas.width, ctx!.canvas.height, "black");
-	drawRect(ctx, 0, data.player_left.y, width / 60, height / 4, "white");
-	drawRect(ctx, width - width / 60, data.player_right.y, width / 60, height / 4, "white");
-	for (let i = 0; i <= height ; i += height / 27)
-		drawRect(ctx, width * 0.48, i, width * 0.04, height * 0.025, "white");
-	drawRect(ctx, data.ball.x - width / 60, data.ball.y - height / 60, width / 30, width / 30, "white");
-	drawText(ctx, data.player_left.score.toString(), width / 4, height / 6, "white");
-	drawText(ctx, data.player_right.score.toString(), width * 3 / 4, height / 6, "white");
-}
-
-export default Game;
