@@ -10,7 +10,7 @@ exports.MessagesService = void 0;
 const common_1 = require("@nestjs/common");
 let MessagesService = class MessagesService {
     constructor() {
-        this.messages = [{ name: 'TheEyesServer', text: 'Welcome' },];
+        this.messages = [];
         this.ClientToUser = {};
     }
     identify(name, clientId) {
