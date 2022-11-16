@@ -48,11 +48,11 @@ function App() {
   }, [messages]);
 
   const sendMessage = () => {
-    console.log(`${userName} want to say : ${userMessage}`);
+    // console.log(`${userName} want to say : ${userMessage}`);
 
     if (userMessage) {   
       socket.emit('createMessage', {text: userMessage, name : userName }, () => {
-        console.log("message sent succuessfuly");
+        // console.log("message sent succuessfuly");
         setUserMessage("");
       })
     }
@@ -60,9 +60,9 @@ function App() {
 
   const joinRoom = (e: any) => {
     e.preventDefault();
-    console.log(`${userName} wants to join`);
+    // console.log(`${userName} wants to join`);
     socket.emit('join', {name: userName}, () => { // name for a payload && retuen names on 3th param for everyone jioned
-      console.log(`${userName} joined successfuly`);
+      // console.log(`${userName} joined successfuly`);
       setJoined(true);
     })
   }

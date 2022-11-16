@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Player {
+  player_id Int @id @default(autoincrement())
+  username String @unique
+  avatar String @default("https://i.imgur.com/1DmPoeh.png")
+  is_playing Boolean @default(false)
+  wines Int @default(0)
+  loses Int @default(0)
+  authentification_token String @unique
+  game_winned game_history [] @relation("game_winned")
+  game_losed game_history [] @relation("game_losed")
+  msgs message [] @relation("player_msgs")
+  membership membership [] @relation("player_membership")
+  relation_from relation [] @relation("player_relation_from")
+  relation_too relation [] @relation("player_relation_too")
+}
+
+model game_history {
+  id_game_history Int @id @default(autoincrement())
+  winner Player @relation("game_winned", fields: [winner_id], references: [player_id])
+  winner_id Int
+  winner_scoor Int
+  looser Player @relation("game_losed", fields: [looser_id], references: [player_id])
+  looser_id Int
+  losser_scoor Int
+  created_at DateTime @default(now())
+}
+
+
+model chatroom{
+  chat_room_id Int @id @default(autoincrement())
+  name String
+  ischannel Boolean
+  ispublic Boolean
+  password String
+  created_at String
+  updated_at String
+  msgs message [] @relation("chat_room_msg")
+  membership membership [] @relation("chat_room_membership")
+}
+
+model message{
+  message_id Int @id @default(autoincrement())
+  content String
+  created_at DateTime @default(now())
+  author Player @relation("player_msgs", fields: [author_id], references: [player_id])
+  author_id Int
+  created_in chatroom @relation("chat_room_msg", fields: [chat_id], references: [chat_room_id])
+  chat_id Int
+}
+
+model membership{
+  id_membership Int @id @default(autoincrement())
+  player Player @relation("player_membership", fields: [player_id], references: [player_id])
+  player_id Int
+  chatroom chatroom @relation("chat_room_membership", fields: [chat_id], references: [chat_room_id])
+  chat_id Int
+  rool String
+}
+
+model relation{
+  id_relation Int @id @default(autoincrement())
+  player1 Player @relation("player_relation_from", fields: [player1_id], references: [player_id])
+  player1_id Int
+  player2 Player @relation("player_relation_too", fields: [player2_id], references: [player_id])
+  player2_id Int
+  status String
+}
