@@ -38,26 +38,22 @@
   }
   .ChatRoomBox-card {
     position: relative;
-    z-index: 3;
+    z-index: 5;
     width: 100%;
-    margin: 0 20px;
-    padding: 70px 30px 44px;
+    margin: 0 2px;
+   float: left;
+    padding: 35px 30px 44px;
     border-radius: 1.25rem;
     background: #004e92;
     text-align: center;
-
 
     
   }
   .History-Box {
     position: relative;
     width: 100%;
-    padding: 70px 30px 44px;
-    border-radius: 1.25rem;
     background: white;
     text-align: center;
-    flex-direction: row;
-    justify-content: space-between;
     height: 300px;
     overflow-y: scroll;
   }
@@ -68,7 +64,9 @@
   @media (width >= 500px) {
     .ChatRoomBox-card {
       margin: 0;
-      width: 400px;
+      width: 300px;
+    border-radius: 0.5rem;
+      bottom: 65px;
     }
   }
   

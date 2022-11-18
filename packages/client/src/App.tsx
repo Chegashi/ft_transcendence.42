@@ -8,16 +8,18 @@ import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import Home from './components/pages/HomePage';
 import Pong from './components/pages/Pong';
 import LeaderBoard from './components/pages/LeaderBoard';
-import Account from './components/pages/Account';
+import Account from './components/Account/Account';
 import AboutUs from './components/pages/AboutUs';
 import HowToPlay from './components/pages/HowToPlay';
 import { Landing } from './components/Chatrooms/Landing';
 import { ChatRoom } from './components/Chatrooms/ChatRoom';
 import  Friendprofile  from './components/Friendlist/Friendprofile';
-import Pseudo from './components/login/Account_infos';
+import Pseudo from './components/Account/Account_infos';
 import  CreateRoom  from './components/Chatrooms/CreateRoom';
+import Carreer from './components/Account/Account_pages/Carreer';
+import Achievements from './components/Account/Account_pages/Achievements/Achievements'
 import './AppStyle.css'
-
+import Social from './components/Account/Account_pages/Social/Social'
 
 function App() {
   return (
@@ -36,6 +38,11 @@ function App() {
       <Route path="/room/:id" element={<ChatRoom />} />
       <Route path="/CreateRoom" element={<CreateRoom />} />
       <Route path="/users/:id" element={<Friendprofile />} />
+      <Route path="/Carreer" element={<Carreer/>} />
+      <Route path="/Achievements" element={<Achievements/>} />
+      <Route path="/Social" element={<Social/>} />
+
+    
       </Routes>
       </Router>
     </div>

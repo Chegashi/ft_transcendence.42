@@ -1,6 +1,6 @@
 import React from 'react';
 import {Routes, Route, useNavigate} from 'react-router-dom';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import person from '../users/users.json'
 import './ChatRoomBox.css'
 import MessageList from '../DirectMsg/MessageList';
@@ -8,7 +8,10 @@ import MessageList from '../DirectMsg/MessageList';
 const ChatRoomBox = (props) => {
   const users = [{ username: "Jane", password: "testpassword" ,ChatRoomBox: ""}];
   const [inputMsg,SetInputMsg] = useState("");
+  const [BanUser,SetBanUser] = useState("");
 
+  const [user42,SetUser42] = useState<any>([])
+  const [UserAdmin,SetUserAdmin] = useState(false);
 
   const MsgHistory = [
     {id:0,userId:1,username:"narjdal",msg:"salut"},
@@ -38,6 +41,30 @@ var MsgList =[...MsgHistory];
       //Post request to Backend
     }
   }
+  const HandleBanUser = (e) => {
+    e.preventDefault();
+    SetBanUser(e.target[0].value);
+  }
+  useEffect (() => {
+    const loggeduser = localStorage.getItem("user");
+
+    if(loggeduser)
+    {
+      var Current_User = JSON.parse(loggeduser);
+      let OwnedDbId = 1;
+      // console.log("=>>>>> FROM THE Chatroom "   + Current_User.nickname + Current_User.UserId + OwnedDbId + "This room Owner Id  is :> " + room.OwnerId)
+    //   var help = JSON.parse(room.AdminsIds);
+      console.log("=>>> " +props.room.AdminsIds);
+
+      if(Current_User.UserId == props.room.AdminsIds)
+      {
+        console.log("User is Admin ! ");
+      SetUserAdmin(true);
+      }
+    //   var new_User = [...Current_User];
+      SetUser42(Current_User);
+    }
+},[]);
 return (
   <div className='body'>
     <div className='ChatRoomBox-card'>
@@ -46,7 +73,6 @@ return (
       {MsgList.map(c => < MessageList  key = {c.id} user ={c} />)}
       </div>
       <form className='ChatRoom-Input-form' onSubmit={HandleInputMsg}>
-      <div className="md-textbox">
       <input type="text"
        className={`${inputMsg ? "has-value" : ""}`}
        id="textbox"
@@ -54,7 +80,25 @@ return (
        value={inputMsg || ""}
        /> 
       <label htmlFor="textbox"> Message: </label>
+      
+
+      {UserAdmin ? ( 
+          <div>
+             <input type="text"
+       className={`${BanUser ? "has-value" : ""}`}
+       id="textbox"
+       onChange={event => SetBanUser(event.target.value)}
+       value={BanUser || ""}
+       /> 
+      <label htmlFor="textbox"> Ban : </label>
       </div>
+      ) : (
+        <div>
+          </div>
+      )
+
+
+      }
  
   </form>
   </div>

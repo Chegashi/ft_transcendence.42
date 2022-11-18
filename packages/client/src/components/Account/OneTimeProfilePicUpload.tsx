@@ -7,8 +7,10 @@ import axios from 'axios';
 import { text } from 'stream/consumers';
 // https://stackoverflow.com/questions/23427384/get-form-data-in-reactjs
 const OneTimeProfilePicUpload = () => {
-	const [selectedFile, setSelectedFile] = useState([]);
+	const [selectedFile, setSelectedFile] = useState<any>([null]);
 	const [nickName, setNickName] = useState("");
+	const [loaded,setLoaded] = useState(0);
+	const [avatar,SetAvatar] = useState <any>([]);
 	const [value, setValue] = useState("");
 	const [isFilePicked, setIsFilePicked] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -26,8 +28,16 @@ const OneTimeProfilePicUpload = () => {
 
       }
 	const changeHandler = (event) => {
+
 		setSelectedFile(event.target.files[0]);
+		if (isFilePicked == "true")
+		{
+			setIsFilePicked("false");
+		}
+		else {
 		setIsFilePicked("true");
+		}
+
         event.preventDefault()
 	};
 
@@ -35,50 +45,104 @@ const OneTimeProfilePicUpload = () => {
 		setValue(e.target.value);
 	  };
 	
+
 	  async function UploadData (post)
 	  {
         const loggedUser = localStorage.getItem("user");
 		if(loggedUser)
 		{
-
 		var Current_User = JSON.parse(loggedUser);
 		console.log("LoggedUser " + Current_User.UserId);
 const text = "http://localhost:8000/users/" + Current_User.UserId;
 console.log("Api Post Link :  =>  " + text);
 
-const response = await axios.put(text, post);
+const response = await axios.put(text, post,{
+	onUploadProgress: progressEvent => {
+		setLoaded(progressEvent.loaded / progressEvent.total!*100);
+	},
+});
 // console.log(" Id : " + JSON.stringify(response.data));
 // // setauthenticated("true");
 // // SetUser42(response.data);
 // // setuser(response.data);
 return (response.data);
 }
+}
+
+async function UploadDataWithProfilePicture (form)
+{
+
+	const loggedUser = localStorage.getItem("user");
+	if(loggedUser)
+	{
+	var Current_User = JSON.parse(loggedUser);
+	console.log("LoggedUser " + Current_User.UserId);
+const text = ("http://localhost:9000/upload_file");
+console.log("Api Post Link :  =>  " + text);
+
+const response = await axios.post("http://localhost:9000/upload", form)
+	
+// 	onUploadProgress: progressEvent => {
+// 		setLoaded(progressEvent.loaded / progressEvent.total!*100);
+// 	},
+// });
+// 	}
+	return response.data;
+	}
+}
+
+async function fetchProfilePicture(id,image_url,destination,filename)
+{
+
+	const text = "http://localhost:9000/GetUserPicture?id=" + id +"&path=" + image_url;
+	const response =  await axios.get(text,{
+		headers:{
+			userId:id,
+			mypath:image_url,
+			destination:destination,
+			filename:filename
+		}
+	})
+	console.log("text is => " + text);
+	// Weir Response Here 
+	// console.log("resp => " + response.data);
+	return response.data;
+}
 
 
 		// const loggeduser  = localStorage.getItem("user");
 
 	
-	  }
 	const handleSubmission = () => {
         const formData = new FormData();
-		const MyForm = [
-			{ file:selectedFile,nickName:nickName}
-		]
-		// formData.append('File', selectedFile);
-        // formData.append('nickname',nickName);
-        console.log("Handle Submission : " + selectedFile + nickName.length)
+		
+
+		const UserObject  = JSON.parse(localStorage.getItem("user")!);
+		const {UserId} = UserObject
+
+
+		formData.append('file', selectedFile);
+        formData.append('nickname',nickName);
+		console.log("The User ID => " + UserId)
+        formData.append('userId',UserId);
+
+        console.log("Handle Submission : "+ nickName.length)
         if(nickName.length > 0 )
-        {
-			const post = {nickName:nickName};
-			console.log("Currently Upload to Backend : " + nickName);
+		{
+		if (!isFilePicked  || isFilePicked =="false")
+		{
+
+			const post = {nickname:nickName};
+			console.log("Currently Upload to Backend : Nickname only" + nickName );
 			UploadData(post)
 			.then((resp) => 
 			{
 				let loggedUser = localStorage.getItem("user");
 				const test  = JSON.stringify(resp);
 				console.log("The Resp is => " +  test + " The Nicknamne => " + resp.nickname);
-				console.log("Logged User   " + loggedUser);
+				console.log("Logged User   " + loggedUser );
 				const UserObject = JSON.parse(JSON.stringify(loggedUser));
+				navigate("/Account");
 				// if(!UserObject.nickname)
 				// {
 					const {usual_full_name,image_url} = UserObject;				const UpdatedUser42 = [
@@ -97,6 +161,55 @@ return (response.data);
 				
 				// loggedUser{nickname:"resp.nickname"};
 			})
+		}
+		else {
+			
+			const post = {
+				nickname:nickName,
+				File:selectedFile
+				};
+			console.log("Currently Upload to Backend  With ProfilePic ! => " + nickName + " => " + post.File['name']);
+			UploadDataWithProfilePicture(formData)
+			.then((resp) => 
+			{
+				const {UserId,image_url,destination,filename,nickname} = resp;
+				const test  = JSON.stringify(resp);
+				console.log("The Resp is => " +  test + " => " + nickname);
+				localStorage.setItem("user","");
+				localStorage.setItem("user",test);
+				navigateAccount();
+// 				fetchProfilePicture(UserId,image_url,destination,filename)
+// 				.then((resp) => {
+// // Here not working , Do i Download It Or i just charge the url from the path received before ?
+// 				// SetAvatar(resp);
+// 				// const test = Buffer.from(resp.data,'binary').toString('base64');
+// 				console.log("Response from GetUserPicture  ! " );
+// 				navigateAccount();
+
+// 				})
+// 				let UpdatedUser = localStorage.getItem("user");
+// 				console.log("Logged User   " + UpdatedUser);
+				// const UserObject = JSON.parse(JSON.stringify(UpdatedUser));
+				// // if(!UserObject.nickname)
+				// // {
+				// 	const {usual_full_name,image_url} = UserObject;				const UpdatedUser42 = [
+				// 	{
+				// 		UserId:resp.id,
+				// 		usual_full_name:usual_full_name,
+				// 		image_url:image_url,
+				// 		nickname:resp.nickname
+				// 	}
+				// ]
+				// SetUpdateUser({[...UserObject,nickname:"salut"]});
+				// localStorage.setItem("user",JSON.stringify(UpdatedUser42));
+			// }
+				// loggedUser["nickname"]:resp.nickname;
+				// loggedUser{nickname:resp.nickname};
+				
+				// loggedUser{nickname:"resp.nickname"};
+			})
+		}
+
 		// fetch(
 		// 	'https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
 		// 	{
@@ -112,8 +225,8 @@ return (response.data);
 		// 		console.error('Error:', error);
 		// 	});
 		
-		navigateAccount();
         }
+		
         else
         {
             setErrorMessage("Please chose a valid username ");
@@ -158,6 +271,7 @@ return (response.data);
 			)}
 				<button type ="submit" onClick={handleSubmission}>Submit</button>
                 {errorMessage && <div className="error"> {errorMessage} </div>}
+				<div> {Math.round(loaded)}  </div>
       </form>
 	  </div>
 		</div>

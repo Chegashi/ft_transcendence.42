@@ -8,6 +8,7 @@ const ContactList = (props) =>
 {
     const [AddFriend,setAddFriend] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    // const [Dmcount,SetDmCount] = useState(0);
 
     const [ContactList,setContactList] = useState([]);
     const [username, setUsername] = useState("");
@@ -20,9 +21,11 @@ const ContactList = (props) =>
         if(loggeduser)
         {
           var Current_User = JSON.parse(loggeduser);
-          console.log("=>>>>> FROM THE NAVBAR "   + Current_User.nickname + Current_User.UserId)
+          console.log("=>>>>> FROM THE ContactList "   + Current_User.nickname + Current_User.UserId)
           SetUser42(Current_User);
         }
+    // localStorage.setItem("DmCount",Dmcount.toString());
+
     },[]);
 
 //   const handleSearch = async () => {
@@ -37,6 +40,9 @@ const ContactList = (props) =>
     const handleSelect = (e) => {
         // e.code == "select"
         // e.code === "Enter" && handleSearch();
+        console.log("inside Handle Select ",localStorage.getItem("Dmcount"));
+        // SetDmCount(Dmcount + 1);
+        // localStorage.setItem("Dmcount",Dmcount.toString());
       };
     const handleKey = (e) => {
         e.preventDefault();
@@ -76,7 +82,9 @@ const ContactList = (props) =>
     return (
         
         <div className="FriendList-container">
-              <div className="search">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        
+             <div className="search">
       <div className="searchForm">
         <input
           type="text"
@@ -85,7 +93,10 @@ const ContactList = (props) =>
           onChange={event => setUsername(event.target.value)}
        value={username || ""}
         />
-        <button type ="submit" onClick={HandleAddFriend}> <img src ="/images/Add.png" className="FriendAddIcon" height="30"/></button>
+        <button type="submit" className='has-border' onClick={HandleAddFriend}>  
+      <span className="icon material-symbols-outlined">
+     {"person_add"}        </span> 
+      </button>
       </div>
       {errorMessage && <div className="error"> {errorMessage} </div>}
       {user42 && (

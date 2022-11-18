@@ -48,9 +48,25 @@ const Home = () => {
                 <td>{Top[0].Victories}</td>
                 <td>{Top[0].winrate}</td>
               {Top[0].isActive ? (
-                 <td><img src={Top[0].OnlineIcon} height="35"/> </td>
+                      <td>  
+                      <div className="icon-div">
+  
+                           <button type="button" className='has-border' >  
+                   <span className="icon material-symbols-outlined">
+                  {"check_circle"}        </span> 
+                   </button>
+                   </div>
+                   
+                      </td>
               ) : (
-              <td><img src={Top[0].OfflineIcon} height="35"/> </td>
+                <td> 
+                <div className="icon-off-div">
+             <button type="button" className='has-border' >  
+          <span className="icon material-symbols-outlined">
+         {"cancel"}        </span> 
+          </button>
+          </div>
+             </td>
               )}
 
             </tr>
@@ -63,9 +79,25 @@ const Home = () => {
                 <td>{Top[1].Victories}</td>
                 <td>{Top[1].winrate}</td>
               {Top[1].isActive ? (
-                 <td><img src={Top[1].OnlineIcon} height="35"/> </td>
+                      <td>  
+                      <div className="icon-div">
+  
+                           <button type="button" className='has-border' >  
+                   <span className="icon material-symbols-outlined">
+                  {"check_circle"}        </span> 
+                   </button>
+                   </div>
+                   
+                      </td>
               ) : (
-              <td><img src={Top[1].OfflineIcon} height="35"/> </td>
+                <td> 
+                <div className="icon-off-div">
+             <button type="button" className='has-border' >  
+          <span className="icon material-symbols-outlined">
+         {"cancel"}        </span> 
+          </button>
+          </div>
+             </td>
               )}
 
             </tr>
@@ -78,9 +110,25 @@ const Home = () => {
                 <td>{Top[2].Victories}</td>
                 <td>{Top[2].winrate}</td>
               {Top[2].isActive ? (
-                 <td> <img src={Top[2].OnlineIcon} height="35"/></td>
+                       <td>  
+                       <div className="icon-div">
+   
+                            <button type="button" className='has-border' >  
+                    <span className="icon material-symbols-outlined">
+                   {"check_circle"}        </span> 
+                    </button>
+                    </div>
+                    
+                       </td>
               ) : (
-              <td><img src={Top[2].OfflineIcon} height="35"/> </td>
+                      <td> 
+                <div className="icon-off-div">
+                 <button type="button" className='has-border' >  
+              <span className="icon material-symbols-outlined">
+             {"cancel"}        </span> 
+              </button>
+              </div>
+                 </td>
               )}
 
             </tr>

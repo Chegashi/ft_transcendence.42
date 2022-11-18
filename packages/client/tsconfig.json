@@ -105,7 +105,5 @@
     "noImplicitAny": false,
 
   },
-  "include": ["src/**/*"],
-  "babel": { "compact": true }
-
+  "include": ["src/**/*"]
 }

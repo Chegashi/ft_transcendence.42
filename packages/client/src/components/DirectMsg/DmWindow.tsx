@@ -6,6 +6,7 @@ import MessageList from './MessageList';
 const DmWindow = (props) => {
 	const [Msg, setMsg] = useState("");
     const [click,SetClick] = useState(false);
+    const [NbrPos,SetNbrPos] = useState(0);
     //Fetch Message History from backend , for the  Contact inside the prop , Get the correct User using the state 
     const [count,SetCount] = useState<any>("");
     const [OpenDmBox,SetOpenDmBox] = useState(true);
@@ -27,15 +28,17 @@ const DmWindow = (props) => {
 
     };
     useEffect (() => {
-        const vrcount = localStorage.getItem("DmCount");
+        const vrcount = localStorage.getItem("Dmcount");
     console.log("vrcount =>> " + JSON.stringify(vrcount));
         // SetClick
+        // SetNbrPos(NbrPos + 1)
+    // console.log("NbrPos =>> " + NbrPos);
         SetCount(vrcount);
     //     console.log("Inside count !" + count);
     // SetCount(count + 1);
     // if(count == 1)
     // SetCount(0);
-    },[localStorage.getItem("DmCount")]);
+    },[]);
     const HandleOpenDmBox = () => {
 SetOpenDmBox(!OpenDmBox);
     };
@@ -44,11 +47,13 @@ SetOpenDmBox(!OpenDmBox);
         
         <div>
             {OpenDmBox ? (
-        <div className={count == "0" ? ("DmBox") : ( "SecondBox")}>
+        <div className={count == "0" ? ("DmBox") : ( count == "1" ? ("SecondBox") : ("ThirdBox"))}>
         <div className='DmHeader'>
     <button onClick={HandleOpenDmBox}>  
-    <span>{props.contact.name}
-    </span></button>
+    <span>
+        {props.contact.name}
+    </span>
+    </button>
     </div>
         <div className="History">
         {MsgList.map(c => < MessageList  key = {c.id} user ={c} />)}
@@ -65,7 +70,7 @@ SetOpenDmBox(!OpenDmBox);
        </div>
             ) : (
                 <div className="History">
-                <div className='DmBar'>
+                <div className={count == "0" ? ("DmBar") : ( count == "1" ? ("SecondDmBar") : ("ThirdDmBar")) }>
                     <button  className="DmBarButton"onClick={HandleOpenDmBox}>
                         <span> {props.contact.name} </span></button>
                  </div>

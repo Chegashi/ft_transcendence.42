@@ -25,6 +25,14 @@
 
 
   }
+.icon-div >  button > span {
+    color: #1cb380;
+  }
+
+  .icon-off-div >  button > span {
+    color: #a40221;
+  }
+
   .DmClass{
     background: blueviolet;  
     position: absolute;

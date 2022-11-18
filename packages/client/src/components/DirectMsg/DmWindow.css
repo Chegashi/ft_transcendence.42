@@ -36,7 +36,28 @@
   overflow-y: scroll;
   position: fixed;
   bottom: 0;
-  left: 10vh;
+  left: 20vh;
+
+}
+
+.ThirdBox {
+  display: grid;
+  grid-column-start: 2;
+  grid-column-end: 9;
+  grid-row-start: 1;
+  grid-row-end: 190;
+  background:purple;
+  border-radius: 5px;
+  height:250px;
+  width:200;
+  overflow-y: scroll;
+  position: fixed;
+  bottom: 0;
+  left: 34vh;
+
+}
+.DmHeader  > span{
+  color: white;
 
 }
 .self {
@@ -89,6 +110,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
   }
+
   .DmBar{
     position: fixed;
     left : 72px;
@@ -99,6 +121,34 @@
     border-radius: 5px;
     font-size: 0.8rem;
 
+    bottom :0;
+    width: 100px;
+  }
+
+  .SecondDmBar{
+    position: fixed;
+    left : 170px;
+    background-color: red;
+    padding: 10px;
+    color: white;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+
+    bottom :0;
+    width: 100px;
+  }
+
+  .ThirdDmBar{
+    position: fixed;
+    left : 270px;
+    background-color: purple;
+    padding: 10px;
+    color: white;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    border-color: white;
     bottom :0;
     width: 100px;
   }

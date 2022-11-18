@@ -7,11 +7,13 @@ import {useEffect} from "react";
 import logout from '../logout/logout';
 import LogOut from '../logout/logout';
 import person from "../users/users.json"
+import ContactList from '../Friendlist/ContactList';
 import { useNavigate,useLocation} from 'react-router-dom';
 
 
 function TempoNav() {
     const [click,setClick]= useState(false);
+  const [isShown,setIsShown] = useState(false);
     const [authenticated, setauthenticated] = useState("");
     const navigate = useNavigate();
   const [user42,SetUser42] = useState <any>([]);
@@ -37,7 +39,12 @@ function TempoNav() {
           window.location.reload();
       }
   };
+  
+  const handleFriendClick = event => {
+    // Toggle Shown state
+    setIsShown(current => !current);
 
+     };
   useEffect(() => {
     const authenticated = localStorage.getItem("authenticated");
     const loggeduser = localStorage.getItem("user");
@@ -101,6 +108,21 @@ function TempoNav() {
                   </button>
       <img src={user42.image_url} height="35" className='GameProfilePic'/>
     </div>
+    <button type="button" className='has-border' onClick={handleFriendClick}><img src="/images/Chaticon.png" height="35"/>
+                    <span> Social</span>
+                      </button>
+                     {isShown && ( 
+                        
+                      //Show the friendlist only if button is pressed
+                      // Here : Send an array.map of the Friendlist of the user 
+                      // get request to backend , JSON object -> parse 
+                      <div className='Contact'>
+                        <span>
+                        
+                        <ContactList contacts={person} />
+                        </span>
+                      </div>
+                     )}
       <div className='TempoBody'>
     <button type="button" className="TempoBurger" >
     </button>

@@ -3,13 +3,21 @@ import { useState } from "react";
 import person from '../users/users.json'
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import './ProfilePicUpload.css'
+import axios from 'axios';
+
+
 // https://stackoverflow.com/questions/23427384/get-form-data-in-reactjs
 const ProfilePicUpload = (props) => {
 	// const [user42,SetUser42] = useState <any>([]);
+	const[user42,setUser42] = useState <any >([]);
+    const [authenticated, setauthenticated] = useState("");
 	const [selectedFile, setSelectedFile] = useState([]);
 	const [nickName, setNickName] = useState("");
 	const [isFilePicked, setIsFilePicked] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+	const [isFilePicked2, setIsFilePicked2] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
+    const [Updated, setisUpdated] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
     const navigateAccount = () => {
         // 👇️ navigate to /contacts
@@ -23,9 +31,14 @@ const ProfilePicUpload = (props) => {
 
       }
 	const changeHandler = (event) => {
+        event.preventDefault()
+		console.log("Setting the file => " + event.target.files[0])
 		setSelectedFile(event.target.files[0]);
 		setIsFilePicked("true");
-        event.preventDefault()
+		if(event.target.files[0])
+		setIsFilePicked2(true)
+		else
+		setIsFilePicked2(false)
 	};
 // useEffect (() => {
 // 	const authenticated = localStorage.getItem("authenticated");
@@ -38,49 +51,111 @@ const ProfilePicUpload = (props) => {
 // 	}
 
 // },[])
-	const handleSubmission = () => {
+async function UploadPicture(selectedFile)
+{
+	 const loggedUser = localStorage.getItem("user");
+    if(loggedUser)
+    {
         const formData = new FormData();
-		const MyForm = [
-			{ file:selectedFile,nickName:nickName}
-		]
-		// formData.append('File', selectedFile);
-        // formData.append('nickname',nickName);
-        console.log("Handle Submission : " + nickName)
-        if(nickName)
+		const UserObject  = JSON.parse(localStorage.getItem("user")!);
+		const {UserId,nickname,image_url} = UserObject
+
+	
+	formData.append('file', selectedFile);
+	formData.append('nickname',nickname);
+	// console.log("The User ID => " + UserId)
+	formData.append('userId',UserId);
+	formData.append('image_url',image_url)
+
+	// const MyForm = [
+	// 	{ file:selectedFile,
+	// 	nickname:Current_User.nickname,
+	// 	UserId:Current_User.UserId,
+	// 	image_url:Current_User.image_url
+	// 	}
+	// ]
+	const text = ("http://localhost:9000/upload_file");
+console.log("Api Post Link :  =>  " + text);
+
+const response = await axios.post("http://localhost:9000/upload", formData)
+	
+// 	onUploadProgress: progressEvent => {
+// 		setLoaded(progressEvent.loaded / progressEvent.total!*100);
+// 	},
+// });
+
+// 	}
+	return response.data;
+
+//   console.log("Uploading Picture For this User =>  " + Current_User.UserId);
+//   const text = ("http://localhost:9000/update/nickname");
+//   console.log("Api Post Link :  =>  " + text);
+  
+//   const response = await axios.post(text,formData)
+
+//     return response.data;
+    }
+  
+}
+
+	const handleSubmission = (e) => {
+		e.preventDefault();
+		const file = selectedFile;
+        const formData = new FormData();
+	
+      
+        if(isFilePicked2 && selectedFile!)
         {
-		// fetch(
-		// 	'https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
-		// 	{
-		// 		method: 'POST',
-		// 		body: formData,
-		// 	}
-		// )
-		// 	.then((response) => response.json())
-		// 	.then((result) => {
-		// 		console.log('Success:', result);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.error('Error:', error);
-		// 	});
-		navigateAccount();
+			// Request to Backend to  Update Profile Picture only 
+			// IF error set Error message accordingly 
+			console.log("Handle Submission Profile pic upload  : " + selectedFile['name'])
+			setIsUpdating(true);
+			UploadPicture(selectedFile)
+			.then((resp) => {
+
+				const test  = JSON.stringify(resp);
+
+				console.log("The Resp is => " +  test );
+	// 			// To fixe ...
+	// 			const loggedUser = localStorage.getItem("user");
+	// 			if(loggedUser)
+	// 			{
+    // var Current_User = JSON.parse(loggedUser);
+	// 			const new_user = [{
+	// 				nickname:resp.nickname,
+	// 				UserId:Current_User.UserId,
+	// 				image_url:resp.image_url
+	// 			}]
+	// 			const bruh = JSON.stringify(new_user)
+				localStorage.setItem("user","");
+				localStorage.setItem("user",test);
+				let UpdatedUser = localStorage.getItem("user");
+			console.log("Updated User After Update Profile Pic =>     " + JSON.stringify(UpdatedUser));
+      	setTimeout(() => {
+          setIsUpdating(false);
+          setisUpdated(true);
+          setTimeout(() => setisUpdated(false), 2500);
+          window.location.reload();
+       
+        }, 2000);
+
+			})
+			
+            // setErrorMessage("Please chose a valid username ");
         }
-        else
-        {
-            setErrorMessage("Please chose a valid username ");
-            
-        }
+		else
+	{
+		setErrorMessage("Please chose a valid file !");
+	}
         };
 
 	return(
-   <div className='body'>
-      <div className='login-card'>
-		<h2> Welcome to your Dashboard  {props.ProfileInfo.name} !  </h2>
-		   <img src={props.ProfileInfo.ProfilePic} height="35"/>
-		 <h3>  Please chose a Profile picture : </h3>
-     
+		<>
+		 <h3>  Upload a new Profile Picture </h3>
 		<form className='login-form'>
+			
 			<input type="file" name="file" onChange={changeHandler} />
-			{isFilePicked == "true" ? (
+			{isFilePicked2  ? (
 				<div>
 					<p>Filename: {selectedFile['name']}</p>
 					<p>Filetype: {selectedFile['type']}</p>
@@ -93,11 +168,22 @@ const ProfilePicUpload = (props) => {
 			) : (
 				<p>Select a file to show details</p>
 			)}
-				<button type ="submit" onClick={handleSubmission}>Submit</button>
+			   <button
+			   type="submit"
+      onClick={handleSubmission}
+      className={isUpdating || Updated ? "sending" : ""}
+    >
+      <span className="icon material-symbols-outlined">
+        {Updated ? "check" : "send"}
+      </span>
+      <span className="text">
+        {isUpdating ? "Updating ..." : Updated ? "Updated" : " Update Profilte picture"}
+      </span>
+    </button>
                 {errorMessage && <div className="error"> {errorMessage} </div>}
       </form>
-				</div>
-		</div>
+		
+		</>
 	)
 };
 

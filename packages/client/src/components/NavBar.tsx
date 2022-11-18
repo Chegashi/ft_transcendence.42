@@ -16,9 +16,11 @@ function Navbar() {
     const [button, setButton] = useState(true);
     const [authenticated, setauthenticated] = useState("");
     const [sideBar,setSideBar] = useState(true);
+    const [blur,SetBlur] = useState(false);
     const toggleSidebar = (e) => {
         document.body.classList.toggle("open");
         setSideBar(!sideBar);
+        SetBlur(!blur);
     }
     const loggedInUser = localStorage.getItem("authenticated");
     const navigate = useNavigate();
@@ -50,6 +52,7 @@ function Navbar() {
          };
          //DOuble LogOut Component To Fixe 
       const LogUserOut = () => {
+        console.log("Inside LogUser Out =>>> ")
         const loggedInUser = localStorage.getItem("authenticated");
         console.log("Before  : " + loggedInUser);
         if (loggedInUser == "true")
@@ -57,30 +60,32 @@ function Navbar() {
             localStorage.setItem("authenticated", "false");
             localStorage.setItem("user","");
             setauthenticated("false");
+
         const loggeduser = localStorage.getItem("user");
         if(loggeduser)
-        var Current_User = JSON.parse(loggeduser);
+           var Current_User = JSON.parse(loggeduser);
             console.log("Logging out ..." + authenticated);
             if(Current_User)
           console.log("=>>>>> FROM THE NAVBAR  LOGOUT "   + Current_User.nickname + Current_User.UserId)
 
-            navigate("/");
+            // navigate("/");
             window.location.reload();
         }
     };
       useEffect(() => {
         const authenticated = localStorage.getItem("authenticated");
     const loggeduser = localStorage.getItem("user");
-        console.log("NavBar : Is User  auth ?  " + authenticated);
+        // console.log("NavBar : Is User  auth ?  " + authenticated);
       
         if (authenticated == "true") {
           setauthenticated(authenticated);
         }
         if(loggeduser)
         {
-          var Current_User = JSON.parse(loggeduser);
-          console.log("=>>>>> FROM THE NAVBAR " + loggeduser   + Current_User.nickname + Current_User.UserId)
-          setUser42(Current_User);
+          setUser42(JSON.parse(localStorage.getItem("user")!))
+          // var Current_User = JSON.parse(loggeduser!);
+          // console.log("=>>>>> FROM THE NAVBAR " + loggeduser   + Current_User.nickname + Current_User.UserId)
+          // setUser42(Current_User);
         }
       //  const {UserId,usual_full_name} = user42;
 
@@ -89,50 +94,66 @@ function Navbar() {
       // console.log("PATHNAME => " + location.pathname)
     return (
         <nav>
-          <div>{location.pathname === "/Pong"  ? (
+          <div>{(location.pathname === "/Pong" || location.pathname=== "/Account_infos")  ? (
            <div>
             </div> 
           ):(
             <div>  {loggedInUser == "true" ? (
               <div>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
                  <div className="body">
             <nav className="sidebar">
               <div className="sidebar-inner">
-                        <header className="sidebar-header">
+                <header className="sidebar-header">
                   <button
                     type="button"
                     className="sidebar-burger"
                     onClick={toggleSidebar}
                   ></button>
-                  <img src={user42.image_url}   className="sidebar-logo" />
+                  <img src={user42.image_url}   className="sidebar-logo" />            
                <span> {user42.nickname}</span> 
                 </header>
                 <nav className="sidebar-menu">
                   <button type="button" onClick={navigateHome} >
-                    <img src="/images/icon-home.svg" />
-                    <span>Home</span>
+                    <span className="icon material-symbols-outlined">
+                Home 
+      </span>
+     <span> Home</span>
                   </button>
                   <button type="button" onClick={navigateAccount} className="has-border">
-                    <img src="./images/icon-accounts.svg" />
-                    <span>Accounts</span>
+                    <span className="icon material-symbols-outlined">
+     {"manage_accounts"} 
+      </span>
+      <span>Account</span>
                   </button>
                   <button type="button" onClick={navigatePlay}>
-                    <img src="./images/cbf1ba6cba8053055f09d9b77fe2b884.jpeg" />
-                    <span>Play</span>
+                <span className="icon material-symbols-outlined">
+     {"videogame_asset"} 
+      </span>
+      <span>Play</span>
                   </button>
         
                   <button type="button" onClick={navigateLeaderBoard} className="has-border">
-                    <img src="./images/icon-acoustic.svg" />
-                    <span>LeaderBoard</span>
+                    <span className="icon material-symbols-outlined">
+     {"LeaderBoard"} 
+      </span>
+     <span>LeaderBoard</span> 
                   </button>
               
                   <button type="button" onClick={navigateChatRooms}>
-                    <img src="./images/icon-levels.svg" />
-                    <span>ChatRooms</span>
+                    <span className="icon material-symbols-outlined">
+     {"Groups"}  
+      </span>
+      <span>Channels</span>
                   </button>
   
-                      <button type="button" className='has-border' onClick={handleFriendClick}><img src="/images/Chaticon.png" height="35"/>
-                    <span> Social</span>
+                      <button type="button" className='has-border' onClick={handleFriendClick}>
+                    <span className="icon material-symbols-outlined">
+     {"People"}  
+      </span>
+      <span>
+      Social
+      </span>
                       </button>
                      {isShown && ( 
                         
@@ -146,9 +167,11 @@ function Navbar() {
                         </span>
                       </div>
                      )}
-                  <button type="button" onClick={LogUserOut}>
-                    <img src="./images/logout-icon-png-transparent-login-logout-icon-11562923416nzkie6fbka.png" />
-                    <span>LogOut</span>
+                  <button type="button" onClick={LogUserOut} style={{bottom:0}}>
+                    <span className="icon material-symbols-outlined">
+     {"logout"} 
+      </span>
+      <span> Log out</span>
                   </button>
                 </nav>
               </div>

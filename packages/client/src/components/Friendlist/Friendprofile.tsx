@@ -14,7 +14,7 @@ const Friendprofile = () => {
 
   if (!user) {
       // TODO: 404
-      console.log("ERROR ·404 " + params.id  + params.name);
+      console.log("ERROR ·404  from Friend Profile ,User Not found" + params.id  + params.name);
  return (
   <>
   </>
