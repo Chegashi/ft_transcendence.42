@@ -4,8 +4,6 @@ import { useState } from 'react';
 import socketService from "../Game/socketService";
 import gameService from "../Game/gameService";
 
-
-
 export type IplayPong = {
     playerLeft: {
         name: string;
@@ -86,7 +84,15 @@ export default function Game(props: any) {
         muteSound.style("font-size", width / 20 + "px");
         muteSound.changed(muteSound_func);
         p5.frameRate(60);
-        console.log("setup", pongData);
+        // console.log("setup", pongData);
+        // if (socketService.socket)
+        // {
+        //     gameService.joinGameRoom(socketService.socket, props.roomId, false);
+        //     // console.log("joinGameRoom");
+        // }
+        // else
+        //     console.log("socketService.socket is null");
+
     }
 
     let start_func = () => {
@@ -102,7 +108,7 @@ export default function Game(props: any) {
         tool.remove();
         muteSound.hide();
         muteSound.remove();
-        console.log("s", tool.value());
+        // console.log("s", tool.value());
     }
 
     const muteSound_func = () => {
@@ -115,7 +121,6 @@ export default function Game(props: any) {
     }
 
     const draw = (p5: p5Types) => {
-        console.log("draw");
         if (start === false) {
             p5.background("slategray");
             p5.textSize(width / 30);
