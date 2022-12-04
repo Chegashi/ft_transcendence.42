@@ -3,6 +3,14 @@ import { IplayPong } from "../components/Game";
 // import GameRooms from '../components/GameRooms';
 
 class GameService {
+  public async getRooms(socket: Socket) {
+    return new Promise((resolve, reject) => {
+      socket.emit("getRooms", (res: any) => {
+        resolve(res);
+      });
+    });
+  }
+
   public async joinGameRoom(socket: Socket, userName: string, is_player:boolean): Promise<boolean> {
     return new Promise((rs, rj) => {
       console.log("joinGameRoom", userName, is_player);

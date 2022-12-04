@@ -10,11 +10,13 @@ import { UpdateGameDto } from './dto/update-game.dto';
 })
 @WebSocketGateway()
 export class GameGateway {
-  constructor(private readonly gameService: GameService) { }
+  constructor(private readonly gameService: GameService) {
+    console.log('intence');
+  }
 
   @SubscribeMessage('createGame')
   createGame(@MessageBody() createGameDto: CreateGameDto) {
-    console.log(createGameDto);
+    console.log(333, createGameDto);
     return this.gameService.createGame(createGameDto);
   }
 }

@@ -9,7 +9,7 @@ import PingPongTrain from './pingPongTrain';
 
 export default function PingPong() {
   const [isInRoom, setInRoom] = useState(false);
-  const [idRoom, setIdRoom] = useState(0);
+  const [roomId, setroomId] = useState(0);
   const [train, setIsTrain] = useState(false);
 
   const connectSocket = async () => {
@@ -25,13 +25,13 @@ export default function PingPong() {
   }, []);
   return (
     <div className="App">
-      {!isInRoom && <GameRooms />}
+      {!isInRoom && <GameRooms roo/>}
       {!isInRoom &&
         <div className="choices">
           <button
             onClick={() => {
               setInRoom(true);
-              setIdRoom(0);
+              setroomId(0);
             }}>Play Pong
           </button>
           <button
@@ -43,7 +43,7 @@ export default function PingPong() {
         </div>
       }
       {isInRoom && <Game idPlayer={(Math.random() + 1).toString(36).substring(7)}
-        width={600} height={400} idRoom={idRoom} />}
+        width={600} height={400} idRoom={roomId} />}
       {train && <PingPongTrain />}
     </div >
   );

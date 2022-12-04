@@ -10,6 +10,7 @@ exports.GameService = void 0;
 const common_1 = require("@nestjs/common");
 let GameService = class GameService {
     createGame(createGameDto) {
+        console.log('createGame222', createGameDto);
         return 'This action adds a new game';
     }
 };

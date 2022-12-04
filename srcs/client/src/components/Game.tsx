@@ -70,17 +70,17 @@ export default function Game(props: any) {
         ctx = p5.createCanvas(width, height).parent(canvasParentRef);
         btn_start = p5.createButton('Start');
         btn_start.mousePressed(start_func);
+        btn_start.id('start_id');
         btn_start.size(width / 3, height / 3);
-        btn_start.style("font-family", "Bodoni");
         btn_start.style("font-size", width / 20 + "px");
-        btn_start.style("background-color", "gray");
         tool = p5.createRadio();
         tool.option('mouse');
         tool.option('keyboard');
-        tool.style("font-family", "Bodoni");
+        tool.id('tool_id');
         tool.style("font-size", width / 20 + "px");
         muteSound = p5.createCheckbox('mute sound', false);
         muteSound.style("font-family", "Bodoni");
+        muteSound.id('muteSound_id');
         muteSound.style("font-size", width / 20 + "px");
         muteSound.changed(muteSound_func);
         p5.frameRate(60);
@@ -92,7 +92,6 @@ export default function Game(props: any) {
         // }
         // else
         //     console.log("socketService.socket is null");
-
     }
 
     let start_func = () => {

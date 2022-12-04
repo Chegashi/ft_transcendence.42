@@ -19,9 +19,10 @@ const create_game_dto_1 = require("./dto/create-game.dto");
 let GameGateway = class GameGateway {
     constructor(gameService) {
         this.gameService = gameService;
+        console.log('intence');
     }
     createGame(createGameDto) {
-        console.log('createGameDto222'z, createGameDto);
+        console.log(333, createGameDto);
         return this.gameService.createGame(createGameDto);
     }
 };
