@@ -4,25 +4,25 @@
 // import socketService from "../Game/socketService";
 // import gameService from "../Game/gameService";
 
-// export type IplayPong = {
-//     playerLeft: {
-//         name: string;
-//         position: number;
-//         score: number;
-//     };
-//     playerRight: {
-//         name: string;
-//         position: number;
-//         score: number;
-//     };
-//     ball: {
-//         x: number;
-//         y: number;
-//     };
-//     isGameStarted: boolean;
-//     musicIndice: string;
-//     userRool: string;
-// };
+export type IplayPong = {
+    playerLeft: {
+        name: string;
+        position: number;
+        score: number;
+    };
+    playerRight: {
+        name: string;
+        position: number;
+        score: number;
+    };
+    ball: {
+        x: number;
+        y: number;
+    };
+    isGameStarted: boolean;
+    musicIndice: string;
+    userRool: string;
+};
 
 export default function Game(props: any) {
     // const [pongData, setPongData] = useState<IplayPong>({
