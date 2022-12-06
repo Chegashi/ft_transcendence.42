@@ -85,13 +85,12 @@ export default function Game(props: any) {
         muteSound.changed(muteSound_func);
         p5.frameRate(60);
         // console.log("setup", pongData);
-        // if (socketService.socket)
-        // {
-        //     gameService.joinGameRoom(socketService.socket, props.roomId, false);
-        //     // console.log("joinGameRoom");
-        // }
-        // else
-        //     console.log("socketService.socket is null");
+        if (socketService.socket)
+        {
+            gameService.joinGameRoom(socketService.socket, props.roomId, false);
+        }
+        else
+            console.log("socketService.socket is null");
     }
 
     let start_func = () => {

@@ -1,11 +1,11 @@
-import React from 'react';
-import './App.css';
-import Game from './game';
+import React from "react";
+import "./App.css";
+import Game from "./Game/game";
 
 function App() {
   return (
     <div className="App">
-    <Game width={600} height={400}/>
+      <Game width={600} height={400} />
     </div>
   );
 }
