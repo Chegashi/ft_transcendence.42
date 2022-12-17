@@ -1,43 +1,16 @@
 version: '3.8'
 services:
-  dev-db:
-    image: postgres:13
+  db:
+    image: postgres:14.1-alpine
+    restart: always
     ports:
-      - 5434:5432
+      - 5432:5432
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    networks:
-      - transcendence
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./srcs/client
-      dockerfile: Dockerfile
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    volumes:
-      - "./packages/client/src:/usr/src/app/src"
-    command: "npm start"
-    networks:
-      - transcendence
-
-  backend:
-    container_name: backend
-    build:
-      context: ./srcs/server
-      dockerfile: Dockerfile.local
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
-    depends_on:
-      - dev-db
-networks:
-  transcendence:
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
