@@ -15,7 +15,7 @@ export class GameService {
   private roomPrefix = 'roomGameSocket';
 
   newPlayer(client: Socket, user: any): any {
-    console.log('Adding a new Player.', user);
+    // console.log('Adding a new Player.', user);
     this.queue.push({ user: user, client });
     // console.log('this is the)
     if (this.queue.length === 2) {
@@ -37,16 +37,16 @@ export class GameService {
       LeftSock.join(this.roomPrefix + gameId);
       RightSock.join(this.roomPrefix + gameId);
 
-      console.log('-----------------------------------------------');
-      console.log('PlayerLeft : ', playerLeft.user);
-      console.log('PlayerRight : ', playerRight.user);
+      // console.log('-----------------------------------------------');
+      // console.log('PlayerLeft : ', playerLeft.user);
+      // console.log('PlayerRight : ', playerRight.user);
 
       //   playerLeft.client.join(this.roomPrefix + gameId);
       //   playerRight.client.join(this.roomPrefix + gameId);
       const replacerFunc = () => {
         const visited = new WeakSet();
         return (key, value) => {
-          if (typeof value === "object" && value !== null) {
+          if (typeof value === 'object' && value !== null) {
             if (visited.has(value)) {
               return;
             }
@@ -58,7 +58,7 @@ export class GameService {
       // const PlayerLeftString = JSON.stringify(game.player_left, replacerFunc());
       // const PlayerRightString = JSON.stringify(game.player_right, replacerFunc());
       const pongData = JSON.stringify(game.update(), replacerFunc());
-      console.log('gameId : ', gameId);
+      // console.log('gameId : ', gameId);
       LeftSock.to(this.roomPrefix + gameId).emit('matchFound', {
         // id: gameId,
         // player_left: PlayerLeftString,
@@ -89,10 +89,9 @@ export class GameService {
   update(client: Socket, user: any): any {
     const gameId = this.PlayersGames[user];
     const game = this.games.get(gameId);
-    console.log('playerLeft : type:', typeof(game.player_left),'value',  game.player_left);
-    const pongData = {
-      id: gameId,
-    };
+    if (game) {
+      client.to(this.roomPrefix + gameId).emit('update', game.update());
+    }
     return game.update();
   }
 

@@ -100,7 +100,11 @@ export default class pong {
     return this.getPongData();
   }
 
-  getPongData(playerId: any): any {
+  getPongData(playerId: any = null): any {
+    let userRool: any;
+    if (playerId === this.player_left.id) userRool = 'left';
+    else if (playerId === this.player_right.id) userRool = 'right';
+    else userRool = 'watcher';
     return {
       gameId: this.gameId,
       playerLeft: {
@@ -119,7 +123,7 @@ export default class pong {
       },
       isPlaying: this.player_left.score < 5 && this.player_right.score < 5,
       musicIndice: this.music,
-      userRool: '',
+      userRool: userRool,
     };
   }
 }

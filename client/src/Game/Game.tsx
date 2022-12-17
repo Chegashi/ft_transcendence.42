@@ -249,32 +249,33 @@ export default function Game(props: any) {
 
     gameState.socket = io("http://localhost:5000/game");
     gameState.socket.on("connect", () => {
-      console.log(gameState.socket); 
+      // console.log(gameState.socket);
     });
 
   },[])
   const [JoinedQueue,setJoingedQueue] = useState(false);
+  const [Playing ,setPlaying] = useState(false);
   useEffect(() => {
-    if(JoinedQueue)
-  {
-
+    if(JoinedQueue){
       gameState.socket.emit ("newPlayer", localStorage.getItem("user")!);
       gameState.socket.on("matchFound", (data: any) => {
-          console.log("A Match had been found ! ",data);
-          // const gameId = JSON.parse(data.id);
-          // console.log("Game ID :  ! ", gameId);
-          // const PlayerLeft = JSON.parse(data.player_left);
-          // const PlayerRight = JSON.parse(data.player_right);
-          // console.log("Data ID:  ! ", JSON.parse(data.id));
-          // gameState.pongData = pongDataParser(data);
-          // console.log("Player Left :  ! ",PlayerLeft)
-          // console.log("PlayerRight  :  ! ",PlayerRight)
-          console.log('data:====> ', data);
-          gameState.gameStatue = "Playing";
-          // console.log("Pong Data :  ! ", pongData);
-        });
-  }
-},[JoinedQueue])
+        gameState.pongData = JSON.parse(data.pongData);
+        gameState.gameStatue = "Playing";
+        setPlaying(true);
+      });
+    }
+    if(Playing){
+      console.log("update player");
+      gameState.socket.on("update", (data: any) => {
+        gameState.pongData = JSON.parse(data.pongData);
+        console.log(gameState.pongData);
+        if (gameState.pongData.isPlaying)
+          setPlaying(true);
+        else
+          setPlaying(false);
+      });
+    }
+  },[JoinedQueue])
 
   const draw = (p5: p5Types) => {
     p5.fill(42, 71, 137);
@@ -338,11 +339,9 @@ export default function Game(props: any) {
           gameState.pongData.playerRight.position && gameState.pongData.userRool === "right"))) {
             gameState.socket.emit("onUpdate", { positon: gameState.playerPosition});
           }
-        if (gameState.socket) {
-            gameState.socket.on("update", (data: any) => {
-              console.log("update", data);
-              gameState.pongData = data;
-            });
+        console.log('check', gameState.socket && Playing)
+        if (gameState.socket && Playing) {
+            setPlaying(true);
         }
       }
       else if (gameState.mode === "offline" && gameState.numberOfPlayers === 1) {
